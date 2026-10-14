@@ -1,0 +1,975 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Grade 8 Simple Present Tense Master Assessment</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-slate-900 via-indigo-950 to-slate-900 text-slate-100 min-h-full flex flex-col justify-between selection:bg-indigo-500 selection:text-white">
+
+    <header class="bg-slate-900/80 backdrop-blur-md border-b border-indigo-900/50 sticky top-0 z-50 px-4 py-3 shadow-xl">
+        <div class="max-w-5xl mx-auto flex flex-col sm:flex-row justify-between items-center gap-3">
+            <div class="flex items-center space-x-3">
+                <div class="bg-indigo-600 p-2.5 rounded-xl shadow-lg shadow-indigo-500/30 flex items-center justify-center text-white font-bold text-xl">
+                    📚
+                </div>
+                <div>
+                    <h1 class="font-bold text-lg text-white tracking-tight">Grade 8 English Mastery</h1>
+                    <p class="text-xs text-indigo-300">Simple Present Tense Assessment (50 Items)</p>
+                </div>
+            </div>
+            
+            <div class="flex items-center space-x-3">
+                <button onclick="toggleTeacherDashboard()" class="text-xs bg-slate-800 hover:bg-slate-700 text-indigo-200 px-3 py-2 rounded-lg border border-indigo-800/50 transition font-medium flex items-center gap-1.5 shadow-sm">
+                    <span>👩‍🏫 Teacher Dashboard</span>
+                </button>
+                <div id="quizTimer" class="hidden font-mono text-sm bg-indigo-900/60 text-indigo-200 px-3 py-1.5 rounded-lg border border-indigo-700/50">
+                    ⏱️ <span id="timerDisplay">00:00</span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-4xl w-full mx-auto p-4 sm:p-6 my-auto flex-grow flex flex-col justify-center">
+
+        <!-- STEP 1: Registration View -->
+        <div id="registrationView" class="bg-slate-900/90 backdrop-blur-xl border border-indigo-500/20 rounded-3xl p-6 sm:p-10 shadow-2xl space-y-8 animate-fadeIn">
+            <div class="text-center space-y-3">
+                <span class="bg-indigo-500/10 text-indigo-400 text-xs font-semibold px-3.5 py-1.5 rounded-full border border-indigo-500/20">Official Assessment</span>
+                <h2 class="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">Welcome, Student!</h2>
+                <p class="text-slate-400 text-sm max-w-md mx-auto">Please enter your identification details below to begin the 50-item Simple Present Tense interactive exam.</p>
+            </div>
+
+            <form id="studentForm" onsubmit="startQuiz(event)" class="space-y-6 max-w-md mx-auto">
+                <div class="space-y-2">
+                    <label class="block text-xs font-semibold uppercase tracking-wider text-indigo-300">Full Name</label>
+                    <input type="text" id="studentName" required placeholder="e.g. Abebe Kebede" 
+                           class="w-full bg-slate-950/80 border border-indigo-900/60 rounded-xl px-4 py-3.5 text-white placeholder-slate-600 focus:outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 transition">
+                </div>
+
+                <div class="space-y-2">
+                    <label class="block text-xs font-semibold uppercase tracking-wider text-indigo-300">ID Number</label>
+                    <input type="text" id="studentId" required placeholder="e.g. STU-2026-089" 
+                           class="w-full bg-slate-950/80 border border-indigo-900/60 rounded-xl px-4 py-3.5 text-white placeholder-slate-600 focus:outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 transition">
+                </div>
+
+                <div class="pt-2">
+                    <button type="submit" class="w-full bg-gradient-to-r from-indigo-600 to-violet-600 hover:from-indigo-500 hover:to-violet-500 text-white font-bold py-4 px-6 rounded-xl shadow-xl shadow-indigo-600/30 transition transform active:scale-95 flex items-center justify-center space-x-2 text-base">
+                        <span>Start Assessment</span>
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"></path></svg>
+                    </button>
+                </div>
+            </form>
+        </div>
+
+        <!-- STEP 2: Quiz Question View -->
+        <div id="quizView" class="hidden space-y-6">
+            <!-- Progress and Question Header -->
+            <div class="bg-slate-900/80 border border-indigo-900/50 rounded-2xl p-4 sm:p-5 shadow-lg flex flex-col sm:flex-row justify-between items-center gap-4">
+                <div class="w-full sm:w-auto flex items-center justify-between sm:justify-start gap-4">
+                    <span id="questionCategoryBadge" class="bg-indigo-500/10 text-indigo-300 text-xs font-semibold px-3 py-1 rounded-lg border border-indigo-500/20">Grammar Category</span>
+                    <span class="text-xs font-medium text-slate-400">Question <strong id="currentQuestionNum" class="text-white">1</strong> of 50</span>
+                </div>
+                <!-- Progress Bar -->
+                <div class="w-full sm:w-48 bg-slate-950 rounded-full h-2.5 overflow-hidden border border-indigo-900/40">
+                    <div id="progressBar" class="bg-gradient-to-r from-indigo-500 to-violet-500 h-2.5 rounded-full transition-all duration-300" style="width: 2%"></div>
+                </div>
+            </div>
+
+            <!-- Question Card -->
+            <div class="bg-slate-900/90 backdrop-blur-xl border border-indigo-500/20 rounded-3xl p-6 sm:p-8 shadow-2xl space-y-6">
+                <div class="flex justify-between items-start gap-4">
+                    <h3 id="questionText" class="text-lg sm:text-xl font-bold text-white leading-relaxed"></h3>
+                    <button onclick="readQuestionAudio()" class="shrink-0 bg-indigo-600/30 hover:bg-indigo-600/50 text-indigo-300 p-2.5 rounded-xl border border-indigo-500/30 transition flex items-center justify-center" title="Read Question (British Accent Voice)">
+                        🔊
+                    </button>
+                </div>
+
+                <!-- Options Grid -->
+                <div id="optionsContainer" class="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+                    <!-- Populated by JS -->
+                </div>
+
+                <!-- Explanation Box (Appears after selection) -->
+                <div id="explanationBox" class="hidden p-5 rounded-2xl border text-sm space-y-3 transition-all animate-fadeIn">
+                    <div class="flex items-center gap-2 font-bold" id="feedbackTitle"></div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 pt-1 border-t border-current/20">
+                        <div>
+                            <span class="text-xs font-bold uppercase tracking-wider block opacity-75 mb-1">🇬🇧 English Explanation:</span>
+                            <p id="explanationEnglish" class="leading-relaxed"></p>
+                        </div>
+                        <div>
+                            <span class="text-xs font-bold uppercase tracking-wider block opacity-75 mb-1">🇪🇹 Amharic Explanation (አማርኛ):</span>
+                            <p id="explanationAmharic" class="leading-relaxed font-serif"></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Navigation Buttons Bar -->
+            <div class="flex justify-between items-center gap-3 pt-2">
+                <button id="prevBtn" onclick="prevQuestion()" class="bg-slate-800 hover:bg-slate-700 text-slate-300 font-semibold py-3 px-5 rounded-xl border border-slate-700 transition flex items-center gap-2 text-sm disabled:opacity-40 disabled:cursor-not-allowed">
+                    ← Back
+                </button>
+                
+                <div class="flex gap-2">
+                    <button id="skipBtn" onclick="skipQuestion()" class="bg-slate-800 hover:bg-slate-700 text-indigo-300 font-semibold py-3 px-5 rounded-xl border border-indigo-900/60 transition text-sm">
+                        Skip / Next →
+                    </button>
+                    <button id="nextBtn" onclick="nextQuestion()" class="bg-indigo-600 hover:bg-indigo-500 text-white font-semibold py-3 px-6 rounded-xl shadow-lg shadow-indigo-600/30 transition text-sm">
+                        Next Question →
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- STEP 3: Results Summary View -->
+        <div id="resultsView" class="hidden bg-slate-900/90 backdrop-blur-xl border border-indigo-500/20 rounded-3xl p-6 sm:p-10 shadow-2xl space-y-8 animate-fadeIn text-center">
+            <div class="space-y-3">
+                <div class="inline-flex bg-indigo-500/10 text-indigo-400 p-4 rounded-2xl border border-indigo-500/20 text-3xl mb-2">🏆</div>
+                <h2 class="text-3xl font-extrabold text-white tracking-tight">Assessment Completed!</h2>
+                <p class="text-slate-400 text-sm">Great job completing the Simple Present Tense Master Test.</p>
+            </div>
+
+            <div class="bg-slate-950/80 border border-indigo-900/50 rounded-2xl p-6 max-w-md mx-auto space-y-4 shadow-inner">
+                <div class="flex justify-between border-b border-indigo-900/40 pb-3">
+                    <span class="text-slate-400 text-sm">Student Name:</span>
+                    <span id="resultName" class="font-bold text-white"></span>
+                </div>
+                <div class="flex justify-between border-b border-indigo-900/40 pb-3">
+                    <span class="text-slate-400 text-sm">Student ID:</span>
+                    <span id="resultId" class="font-bold text-indigo-300"></span>
+                </div>
+                <div class="flex justify-between border-b border-indigo-900/40 pb-3">
+                    <span class="text-slate-400 text-sm">Time Taken:</span>
+                    <span id="resultTime" class="font-bold text-white"></span>
+                </div>
+                <div class="flex justify-between items-center pt-2">
+                    <span class="text-slate-300 font-semibold">Final Score:</span>
+                    <div class="text-2xl font-black text-indigo-400">
+                        <span id="resultScore"></span> / 50 <span class="text-xs text-slate-400 font-normal">(<span id="resultPercentage"></span>%)</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Email & Action Buttons -->
+            <div class="flex flex-col sm:flex-row justify-center gap-4 pt-2 max-w-md mx-auto">
+                <button onclick="sendScoreEmail()" class="flex-1 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white font-bold py-3.5 px-6 rounded-xl shadow-lg shadow-emerald-600/30 transition flex items-center justify-center gap-2 text-sm">
+                    <span>📧 Send Score to Teacher</span>
+                </button>
+                <button onclick="restartQuiz()" class="bg-slate-800 hover:bg-slate-700 text-slate-300 font-semibold py-3.5 px-6 rounded-xl border border-slate-700 transition text-sm">
+                    🔄 Retake Quiz
+                </button>
+            </div>
+        </div>
+
+        <!-- STEP 4: Teacher Dashboard Modal View -->
+        <div id="teacherDashboardModal" class="hidden fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-md flex items-center justify-center p-4">
+            <div class="bg-slate-900 border border-indigo-500/30 w-full max-w-3xl rounded-3xl p-6 sm:p-8 shadow-2xl space-y-6 max-h-[90vh] flex flex-col">
+                <div class="flex justify-between items-center border-b border-indigo-900/60 pb-4">
+                    <div>
+                        <h3 class="text-xl font-bold text-white">👩‍🏫 Teacher Results Dashboard</h3>
+                        <p class="text-xs text-indigo-300">View scores and student submissions stored on this device.</p>
+                    </div>
+                    <button onclick="toggleTeacherDashboard()" class="text-slate-400 hover:text-white bg-slate-800 p-2 rounded-xl text-sm font-bold">✕ Close</button>
+                </div>
+
+                <div class="overflow-y-auto flex-grow space-y-3" id="submissionsListContainer">
+                    <!-- Populated dynamically -->
+                </div>
+
+                <div class="flex justify-between items-center pt-4 border-t border-indigo-900/60">
+                    <button onclick="clearSubmissions()" class="text-xs bg-rose-950/50 hover:bg-rose-900/60 text-rose-300 px-4 py-2 rounded-xl border border-rose-800/50 transition font-medium">
+                        🗑️ Clear History
+                    </button>
+                    <button onclick="toggleTeacherDashboard()" class="bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-bold py-2 px-5 rounded-xl">
+                        Done
+                    </button>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Custom Message Modal (Replacing alert/confirm) -->
+    <div id="customModal" class="hidden fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-sm flex items-center justify-center p-4">
+        <div class="bg-slate-900 border border-indigo-500/30 w-full max-w-sm rounded-3xl p-6 text-center space-y-4 shadow-2xl animate-fadeIn">
+            <div id="modalIcon" class="text-3xl">⚠️</div>
+            <h4 id="modalTitle" class="text-lg font-bold text-white">Notice</h4>
+            <p id="modalMessage" class="text-sm text-slate-300 leading-relaxed"></p>
+            <button onclick="closeModal()" class="w-full bg-indigo-600 hover:bg-indigo-500 text-white font-semibold py-2.5 px-4 rounded-xl transition text-sm">
+                Understood
+            </button>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="text-center py-4 border-t border-indigo-900/40 text-xs text-slate-500">
+        Grade 8 English Unit Assessment • Simple Present Tense Mastery © 2026
+    </footer>
+
+    <script>
+        // 50 Items Database with Grammatical Categories and Detailed Bilingual Explanations
+        const questions = [
+            // Category 1: Passive Voice (1-4)
+            {
+                category: "Passive Voice",
+                question: "In Ethiopia, coffee ________ in many fertile regions of the country.",
+                options: ["is grown", "grows", "grow", "is growing"],
+                answer: 0,
+                expEn: "Coffee is grown passively by farmers; 'is grown' (Present Simple Passive) is correct for general facts.",
+                expAm: "ቡና በብዙ ለም አካባቢዎች ይመረታል፤ አጠቃላይ እውነትን ለመግለጽ 'is grown' (Passive Voice) ያገለግላል።"
+            },
+            {
+                category: "Passive Voice",
+                question: "Amharic and English ________ in secondary schools across the nation.",
+                options: ["teach", "are taught", "is taught", "teaching"],
+                answer: 1,
+                expEn: "Plural subject 'Amharic and English' takes the plural passive form 'are taught'.",
+                expAm: "ባለብዙ ቁጥር ርዕሰ ጉዳይ ስለሆነ 'are taught' የሚለው ትክክለኛ የPassive ቅርጽ ነው።"
+            },
+            {
+                category: "Passive Voice",
+                question: "Fresh teff grain ________ into fine flour to make injera.",
+                options: ["grounds", "ground", "is ground", "are ground"],
+                answer: 2,
+                expEn: "'Teff grain' is singular, so the passive form is 'is ground'.",
+                expAm: "የጤፍ ፍሬ ነጠላ (Singular) ስለሆነ 'is ground' ተብሎ ይጻፋል።"
+            },
+            {
+                category: "Passive Voice",
+                question: "The school library ________ every morning before regular classes begin.",
+                options: ["opens", "is opening", "open", "is opened"],
+                answer: 3,
+                expEn: "Libraries are opened by staff members routinely; 'is opened' highlights the passive state.",
+                expAm: "ቤተ መጻሕፍቱ በሰራተኞች ይከፈታል፤ ስለዚህ 'is opened' የሚለው የPassive አገባብ ትክክል ነው።"
+            },
+            // Category 2: Active Voice Sentences (5-8)
+            {
+                category: "Active Voice",
+                question: "Our teacher ________ important grammar rules on the chalkboard every day.",
+                options: ["writes", "write", "is written", "writing"],
+                answer: 0,
+                expEn: "Singular subject 'Our teacher' requires the verb with -s ('writes').",
+                expAm: "ነጠላ ርዕሰ ጉዳይ 'Our teacher' ከ -s ጋር የሚመጣውን 'writes' ይወስዳል።"
+            },
+            {
+                category: "Active Voice",
+                question: "Farmers in central Ethiopia ________ wheat and barley during the rainy season.",
+                options: ["plants", "plant", "is planted", "planting"],
+                answer: 1,
+                expEn: "Plural subject 'Farmers' takes the base verb 'plant'.",
+                expAm: "ባለብዙ ቁጥር ርዕሰ ጉዳይ 'Farmers' መሰረታዊውን ግስ 'plant' ይወስዳል።"
+            },
+            {
+                category: "Active Voice",
+                question: "The sun ________ in the east every morning without fail.",
+                options: ["rise", "is risen", "rises", "rising"],
+                answer: 2,
+                expEn: "Universal truth with singular subject 'The sun' uses 'rises'.",
+                expAm: "ለሐቅ እውነት 'The sun' ነጠላ ስለሆነ 'rises' የሚለውን ግስ ይይዛል።"
+            },
+            {
+                category: "Active Voice",
+                question: "My elder brother ________ a public bus to work every morning.",
+                options: ["take", "is taken", "taking", "takes"],
+                answer: 3,
+                expEn: "Third-person singular 'My elder brother' requires 'takes'.",
+                expAm: "ሦስተኛ ሰው ነጠላ 'My elder brother' ስላለ 'takes' ይገባል።"
+            },
+            // Category 3: Sentences with 'do' (9-12)
+            {
+                category: "Do / Does Questions & Negatives",
+                question: "________ you finish your English homework before going out to play?",
+                options: ["Do", "Does", "Is", "Are"],
+                answer: 0,
+                expEn: "Subject 'you' takes auxiliary verb 'Do' for questions in Simple Present.",
+                expAm: "ርዕሰ ጉዳይ 'you' ስለሆነ በጥያቄ ጊዜ 'Do' በቅድሚያ ይመጣል።"
+            },
+            {
+                category: "Do / Does Questions & Negatives",
+                question: "Students in primary schools ________ not attend classes on weekends.",
+                options: ["does", "do", "are", "is"],
+                answer: 1,
+                expEn: "Plural subject 'Students' takes 'do not' for negative forms.",
+                expAm: "ብዙ ቁጥር 'Students' ለክፍል አሉታዊ አረፍተ ነገር 'do not' ይጠቀማል።"
+            },
+            {
+                category: "Do / Does Questions & Negatives",
+                question: "________ they practice speaking English together during the lunch break?",
+                options: ["Does", "Is", "Do", "Have"],
+                answer: 2,
+                expEn: "Pronoun 'they' forms questions using 'Do'.",
+                expAm: "ተውላጠ ስም 'they' በጥያቄ ጊዜ 'Do' ይወስዳል።"
+            },
+            {
+                category: "Do / Does Questions & Negatives",
+                question: "I ________ not like to eat spicy food late at night.",
+                options: ["does", "are", "have", "do"],
+                answer: 3,
+                expEn: "First-person pronoun 'I' forms negative sentences with 'do not'.",
+                expAm: "አንደኛ መደብ 'I' ከአሉታዊ አረፍተ ነገር ጋር 'do' ይጠቀማል።"
+            },
+            // Category 4: Sentences with 'does' (13-16)
+            {
+                category: "Does (Singular Questions/Negatives)",
+                question: "________ your sister study hard for her final national examinations?",
+                options: ["Does", "Do", "Is", "Has"],
+                answer: 0,
+                expEn: "Singular subject 'your sister' requires auxiliary verb 'Does'.",
+                expAm: "ነጠላ ርዕሰ ጉዳይ 'your sister' በጥያቄ ጊዜ 'Does' ያስፈልገዋል።"
+            },
+            {
+                category: "Does (Singular Questions/Negatives)",
+                question: "The headmaster ________ not allow students to use mobile phones during lessons.",
+                options: ["do", "does", "is", "has"],
+                answer: 1,
+                expEn: "Singular subject 'The headmaster' uses 'does not' for negatives.",
+                expAm: "ነጠላ ርዕሰ ጉዳይ 'The headmaster' ለአሉታዊ 'does not' ይወስዳል።"
+            },
+            {
+                category: "Does (Singular Questions/Negatives)",
+                question: "________ a camel store water in its hump for long journeys?",
+                options: ["Do", "Is", "Does", "Has"],
+                answer: 2,
+                expEn: "Singular subject 'a camel' takes 'Does' to form a present tense question.",
+                expAm: "ነጠላ እንስሳ 'a camel' በጥያቄ መጀመሪያ 'Does' ይጠቀማል።"
+            },
+            {
+                category: "Does (Singular Questions/Negatives)",
+                question: "She ________ not live near the school, so she takes a minibus daily.",
+                options: ["do", "is", "has", "does"],
+                answer: 3,
+                expEn: "Pronoun 'She' takes 'does not' in negative present tense sentences.",
+                expAm: "ተውላጠ ስም 'She' በአሉታዊ አረፍተ ነገር 'does not' ይወስዳል።"
+            },
+            // Category 5: Verb 'have' (17-20)
+            {
+                category: "Verb 'have'",
+                question: "Many schools in Addis Ababa ________ modern computer laboratories.",
+                options: ["have", "has", "having", "is having"],
+                answer: 0,
+                expEn: "Plural subject 'Many schools' uses the verb 'have'.",
+                expAm: "ባለብዙ ቁጥር 'Many schools' ባለቤትነትን ለመግለጽ 'have' ይወስዳል።"
+            },
+            {
+                category: "Verb 'have'",
+                question: "We ________ three English periods every week according to our schedule.",
+                options: ["has", "have", "having", "is have"],
+                answer: 1,
+                expEn: "First-person plural pronoun 'We' takes 'have'.",
+                expAm: "ብዙ ቁጥር 'We' ቃሉን 'have' ይጠቀማል።"
+            },
+            {
+                category: "Verb 'have'",
+                question: "Grade 8 students ________ a group presentation scheduled for tomorrow.",
+                options: ["has", "having", "have", "are have"],
+                answer: 2,
+                expEn: "Plural subject 'Grade 8 students' takes 'have'.",
+                expAm: "ብዙ ቁጥር 'Grade 8 students' 'have' የሚለውን ግስ ይወስዳል።"
+            },
+            {
+                category: "Verb 'have'",
+                question: "You ________ a great talent for writing short stories and poetry.",
+                options: ["has", "having", "is have", "have"],
+                answer: 3,
+                expEn: "Pronoun 'You' takes 'have' in the simple present tense.",
+                expAm: "ተውላጠ ስም 'You' ከ 'have' ጋር ይሄዳል።"
+            },
+            // Category 6: Verb 'has' (21-24)
+            {
+                category: "Verb 'has'",
+                question: "Ethiopia ________ a unique calendar system with thirteen months.",
+                options: ["has", "have", "having", "is have"],
+                answer: 0,
+                expEn: "Singular proper noun 'Ethiopia' takes 'has'.",
+                expAm: "ነጠላ ስም 'Ethiopia' 'has' የሚለውን ግስ ይወስዳል።"
+            },
+            {
+                category: "Verb 'has'",
+                question: "Our school library ________ a wide collection of science textbooks.",
+                options: ["have", "has", "having", "is having"],
+                answer: 1,
+                expEn: "Singular subject 'Our school library' takes 'has'.",
+                expAm: "ነጠላ ርዕሰ ጉዳይ 'Our school library' 'has' ይወስዳል።"
+            },
+            {
+                category: "Verb 'has'",
+                question: "Every classroom in our school ________ a large chalkboard and wooden desks.",
+                options: ["have", "having", "has", "is have"],
+                answer: 2,
+                expEn: "'Every classroom' is singular and takes 'has'.",
+                expAm: "'Every classroom' ነጠላ በመሆኑ 'has' ይወስዳል።"
+            },
+            {
+                category: "Verb 'has'",
+                question: "A standard football team ________ eleven players on the pitch during a match.",
+                options: ["have", "having", "is have", "has"],
+                answer: 3,
+                expEn: "Singular collective noun 'A standard football team' takes 'has'.",
+                expAm: "ነጠላ ቡድን 'A standard football team' 'has' ይወስዳል።"
+            },
+            // Category 7: Verb 'is' (25-28)
+            {
+                category: "Verb 'is' (Singular)",
+                question: "English ________ an important international language spoken worldwide.",
+                options: ["is", "are", "am", "be"],
+                answer: 0,
+                expEn: "Singular subject 'English' takes the 'To Be' verb 'is'.",
+                expAm: "ነጠላ ርዕሰ ጉዳይ 'English' ከ 'is' ጋር ይያያዛል።"
+            },
+            {
+                category: "Verb 'is' (Singular)",
+                question: "Mount Ras Dashen ________ the highest mountain peak in Ethiopia.",
+                options: ["are", "is", "am", "be"],
+                answer: 1,
+                expEn: "Singular geographical landmark 'Mount Ras Dashen' takes 'is'.",
+                expAm: "ነጠላ ተራራ 'Mount Ras Dashen' 'is' ይወስዳል።"
+            },
+            {
+                category: "Verb 'is' (Singular)",
+                question: "Mathematics ________ a compulsory subject for all middle school students.",
+                options: ["are", "am", "is", "be"],
+                answer: 2,
+                expEn: "School subject names ending in -s (like Mathematics) are singular and take 'is'.",
+                expAm: "የትምህርት አይነት 'Mathematics' ነጠላ በመሆኑ 'is' ይወስዳል።"
+            },
+            {
+                category: "Verb 'is' (Singular)",
+                question: "The capital city of Ethiopia ________ Addis Ababa.",
+                options: ["are", "am", "be", "is"],
+                answer: 3,
+                expEn: "Singular subject 'The capital city' takes 'is'.",
+                expAm: "ነጠላ ርዕሰ ጉዳይ 'The capital city' 'is' ይወስዳል።"
+            },
+            // Category 8: Verb 'are' (29-32)
+            {
+                category: "Verb 'are' (Plural)",
+                question: "Trees ________ essential for producing oxygen and keeping our environment clean.",
+                options: ["are", "is", "am", "be"],
+                answer: 0,
+                expEn: "Plural subject 'Trees' takes 'are'.",
+                expAm: "ብዙ ቁጥር 'Trees' 'are' የሚለውን 'To Be' ግስ ይወስዳል።"
+            },
+            {
+                category: "Verb 'are' (Plural)",
+                question: "The students ________ very excited about the upcoming sports competition.",
+                options: ["is", "are", "am", "be"],
+                answer: 1,
+                expEn: "Plural subject 'The students' takes 'are'.",
+                expAm: "ብዙ ቁጥር 'The students' 'are' ይጠቀማል።"
+            },
+            {
+                category: "Verb 'are' (Plural)",
+                question: "Coffee beans ________ one of Ethiopia's most valuable export products.",
+                options: ["is", "am", "are", "be"],
+                answer: 2,
+                expEn: "Plural subject 'Coffee beans' takes 'are'.",
+                expAm: "ብዙ ቁጥር 'Coffee beans' 'are' ይወስዳል።"
+            },
+            {
+                category: "Verb 'are' (Plural)",
+                question: "Both English and Science ________ interesting subjects to learn in Grade 8.",
+                options: ["is", "am", "be", "are"],
+                answer: 3,
+                expEn: "Compound subject joined by 'and' is plural and takes 'are'.",
+                expAm: "በ 'and' የተገናኙ ሁለት ጉዳዮች ብዙ ቁጥር ስለሆኑ 'are' ይወስዳሉ።"
+            },
+            // Category 9: Verb 'am' (33-36)
+            {
+                category: "Verb 'am' (First Person 'I')",
+                question: "I ________ always punctual and ready to start my lessons on time.",
+                options: ["am", "is", "are", "be"],
+                answer: 0,
+                expEn: "First-person pronoun 'I' always pairs with 'am'.",
+                expAm: "አንደኛ መደብ 'I' ምንጊዜም ከ 'am' ጋር ብቻ ይመጣል።"
+            },
+            {
+                category: "Verb 'am' (First Person 'I')",
+                question: "I ________ proud to be a student at this historical school.",
+                options: ["is", "am", "are", "be"],
+                answer: 1,
+                expEn: "Pronoun 'I' takes 'am'.",
+                expAm: "ተውላጠ ስም 'I' ከ 'am' ጋር ይሄዳል።"
+            },
+            {
+                category: "Verb 'am' (First Person 'I')",
+                question: "I ________ responsible for cleaning the chalkboard after each class.",
+                options: ["is", "are", "am", "be"],
+                answer: 2,
+                expEn: "Pronoun 'I' takes 'am'.",
+                expAm: "ተውላጠ ስም 'I' 'am' ይወስዳል።"
+            },
+            {
+                category: "Verb 'am' (First Person 'I')",
+                question: "I ________ eager to improve my speaking skills in English this year.",
+                options: ["is", "are", "be", "am"],
+                answer: 3,
+                expEn: "Pronoun 'I' takes 'am'.",
+                expAm: "ተውላጠ ስም 'I' 'am' ይወስዳል።"
+            },
+            // Category 10: Common Action Verbs (37-50)
+            {
+                category: "Action Verbs & SVA",
+                question: "Good students ________ their homework every evening after dinner.",
+                options: ["complete", "completes", "completed", "completing"],
+                answer: 0,
+                expEn: "Plural subject 'Good students' takes base verb 'complete'.",
+                expAm: "ብዙ ቁጥር 'Good students' መሰረታዊውን ግስ 'complete' ይወስዳል።"
+            },
+            {
+                category: "Action Verbs & SVA",
+                question: "My grandmother ________ traditional Ethiopian dishes for holiday celebrations.",
+                options: ["cook", "cooks", "cooked", "cooking"],
+                answer: 1,
+                expEn: "Singular subject 'My grandmother' takes verb with -s ('cooks').",
+                expAm: "ነጠላ 'My grandmother' ከ -s ጋር የሚመጣውን 'cooks' ይወስዳል።"
+            },
+            {
+                category: "Action Verbs & SVA",
+                question: "We ________ water from the local tap to irrigate our school garden.",
+                options: ["fetches", "fetching", "fetch", "fetched"],
+                answer: 2,
+                expEn: "Plural subject pronoun 'We' takes base verb 'fetch'.",
+                expAm: "ብዙ ቁጥር 'We' መሰረታዊ ግስ 'fetch' ይወስዳል።"
+            },
+            {
+                category: "Action Verbs & SVA",
+                question: "The science teacher ________ simple chemical reactions in the laboratory.",
+                options: ["demonstrate", "demonstrating", "demonstrated", "demonstrates"],
+                answer: 3,
+                expEn: "Singular subject 'The science teacher' takes verb with -s ('demonstrates').",
+                expAm: "ነጠላ ርዕሰ ጉዳይ 'The science teacher' 'demonstrates' ይወስዳል።"
+            },
+            {
+                category: "Action Verbs & SVA",
+                question: "Honest people always ________ the truth, even when it is difficult.",
+                options: ["speak", "speaks", "spoken", "speaking"],
+                answer: 0,
+                expEn: "Plural subject 'Honest people' takes base verb 'speak'.",
+                expAm: "ብዙ ቁጥር 'Honest people' 'speak' ይወስዳል።"
+            },
+            {
+                category: "Action Verbs & SVA",
+                question: "Birds ________ south to warmer areas during cold weather seasons.",
+                options: ["flies", "fly", "flying", "flew"],
+                answer: 1,
+                expEn: "Plural subject 'Birds' takes base verb 'fly'.",
+                expAm: "ብዙ ቁጥር 'Birds' 'fly' የሚለውን ግስ ይወስዳል።"
+            },
+            {
+                category: "Action Verbs & SVA",
+                question: "A good doctor ________ patients with patience and professional care.",
+                options: ["examine", "examining", "examines", "examined"],
+                answer: 2,
+                expEn: "Singular subject 'A good doctor' takes verb with -es ('examines').",
+                expAm: "ነጠላ 'A good doctor' 'examines' ይወስዳል።"
+            },
+            {
+                category: "Action Verbs & SVA",
+                question: "Primary and secondary students ________ uniform to school every day.",
+                options: ["wears", "wearing", "wore", "wear"],
+                answer: 3,
+                expEn: "Plural subject 'Primary and secondary students' takes base verb 'wear'.",
+                expAm: "ብዙ ቁጥር ተማሪዎች 'wear' የሚለውን ግስ ይጠቀማሉ።"
+            },
+            {
+                category: "Action Verbs & SVA",
+                question: "Our school choir ________ beautiful songs during morning flag ceremonies.",
+                options: ["sings", "sing", "singing", "sang"],
+                answer: 0,
+                expEn: "Singular collective noun 'Our school choir' takes verb with -s ('sings').",
+                expAm: "የዘፈን ቡድን 'Our school choir' 'sings' ይወስዳል።"
+            },
+            {
+                category: "Action Verbs & SVA",
+                question: "Constructive feedback ________ students understand their learning mistakes.",
+                options: ["help", "helps", "helping", "helped"],
+                answer: 1,
+                expEn: "Singular uncountable subject 'Constructive feedback' takes 'helps'.",
+                expAm: "ነጠላ 'Constructive feedback' 'helps' የሚለውን ግስ ይወስዳል።"
+            },
+            {
+                category: "Action Verbs & SVA",
+                question: "Heavy rainfall ________ rivers and lakes during the summer wet season.",
+                options: ["fill", "filling", "fills", "filled"],
+                answer: 2,
+                expEn: "Singular subject 'Heavy rainfall' takes 'fills'.",
+                expAm: "ነጠላ 'Heavy rainfall' 'fills' ይወስዳል።"
+            },
+            {
+                category: "Action Verbs & SVA",
+                question: "Microscopes ________ small objects look much larger to scientific researchers.",
+                options: ["makes", "making", "made", "make"],
+                answer: 3,
+                expEn: "Plural subject 'Microscopes' takes base verb 'make'.",
+                expAm: "ብዙ ቁጥር 'Microscopes' 'make' ይወስዳል።"
+            },
+            {
+                category: "Action Verbs & SVA",
+                question: "My classmate ________ stories with vivid imagination and clear details.",
+                options: ["writes", "write", "writing", "written"],
+                answer: 0,
+                expEn: "Singular subject 'My classmate' takes verb with -s ('writes').",
+                expAm: "ነጠላ 'My classmate' 'writes' የሚለውን ግስ ይወስዳል።"
+            },
+            {
+                category: "Action Verbs & SVA",
+                question: "Solar panels ________ sunlight directly into clean electrical energy.",
+                options: ["converts", "convert", "converting", "converted"],
+                answer: 1,
+                expEn: "Plural subject 'Solar panels' takes base verb 'convert'.",
+                expAm: "ብዙ ቁጥር 'Solar panels' 'convert' ይወስዳል።"
+            }
+        ];
+
+        // State variables
+        let currentQuestionIndex = 0;
+        let studentName = "";
+        let studentId = "";
+        let userAnswers = new Array(questions.length).fill(null);
+        let startTime = null;
+        let timerInterval = null;
+        let examTimeSeconds = 0;
+
+        // UI Element Selectors
+        const registrationView = document.getElementById("registrationView");
+        const quizView = document.getElementById("quizView");
+        const resultsView = document.getElementById("resultsView");
+        const studentForm = document.getElementById("studentForm");
+        const currentQuestionNum = document.getElementById("currentQuestionNum");
+        const progressBar = document.getElementById("progressBar");
+        const questionCategoryBadge = document.getElementById("questionCategoryBadge");
+        const questionText = document.getElementById("questionText");
+        const optionsContainer = document.getElementById("optionsContainer");
+        const explanationBox = document.getElementById("explanationBox");
+        const feedbackTitle = document.getElementById("feedbackTitle");
+        const explanationEnglish = document.getElementById("explanationEnglish");
+        const explanationAmharic = document.getElementById("explanationAmharic");
+        const prevBtn = document.getElementById("prevBtn");
+        const nextBtn = document.getElementById("nextBtn");
+        const skipBtn = document.getElementById("skipBtn");
+        const quizTimer = document.getElementById("quizTimer");
+        const timerDisplay = document.getElementById("timerDisplay");
+
+        // Custom Modal UI
+        function showModal(title, message, isError = false) {
+            document.getElementById("modalTitle").innerText = title;
+            document.getElementById("modalMessage").innerText = message;
+            document.getElementById("modalIcon").innerText = isError ? "❌" : "ℹ️";
+            document.getElementById("customModal").classList.remove("hidden");
+        }
+
+        function closeModal() {
+            document.getElementById("customModal").classList.add("hidden");
+        }
+
+        // Start Quiz Function
+        function startQuiz(event) {
+            event.preventDefault();
+            studentName = document.getElementById("studentName").value.trim();
+            studentId = document.getElementById("studentId").value.trim();
+
+            if (!studentName || !studentId) {
+                showModal("Missing Information", "Please enter both your Full Name and ID Number to proceed.", true);
+                return;
+            }
+
+            registrationView.classList.add("hidden");
+            quizView.classList.remove("hidden");
+            quizTimer.classList.remove("hidden");
+
+            startTime = new Date();
+            timerInterval = setInterval(updateTimer, 1000);
+
+            loadQuestion();
+        }
+
+        // Timer Updater
+        function updateTimer() {
+            examTimeSeconds++;
+            const mins = Math.floor(examTimeSeconds / 60).toString().padStart(2, '0');
+            const secs = (examTimeSeconds % 60).toString().padStart(2, '0');
+            timerDisplay.innerText = `${mins}:${secs}`;
+        }
+
+        // Load Question into UI
+        function loadQuestion() {
+            const q = questions[currentQuestionIndex];
+            currentQuestionNum.innerText = currentQuestionIndex + 1;
+            questionCategoryBadge.innerText = q.category;
+            questionText.innerText = `${currentQuestionIndex + 1}. ${q.question}`;
+
+            // Update Progress Bar
+            const progressPercent = ((currentQuestionIndex + 1) / questions.length) * 100;
+            progressBar.style.width = `${progressPercent}%`;
+
+            // Render Options (Clickable buttons)
+            optionsContainer.innerHTML = "";
+            const answeredOption = userAnswers[currentQuestionIndex];
+
+            q.options.forEach((opt, idx) => {
+                const btn = document.createElement("button");
+                btn.className = "w-full text-left p-4 rounded-xl border transition flex items-center justify-between font-medium text-sm ";
+                
+                const letter = String.fromCharCode(65 + idx); // A, B, C, D
+                
+                if (answeredOption !== null) {
+                    // Already answered: lock choices and highlight correct vs incorrect
+                    btn.disabled = true;
+                    if (idx === q.answer) {
+                        btn.className += " bg-emerald-950/50 border-emerald-500 text-emerald-200 shadow-lg shadow-emerald-900/20";
+                    } else if (idx === answeredOption && answeredOption !== q.answer) {
+                        btn.className += " bg-rose-950/50 border-rose-500 text-rose-200 shadow-lg shadow-rose-900/20";
+                    } else {
+                        btn.className += " bg-slate-950/60 border-indigo-900/40 text-slate-400 opacity-60";
+                    }
+                } else {
+                    // Not yet answered
+                    btn.className += " bg-slate-950/80 hover:bg-indigo-950/50 border-indigo-900/60 hover:border-indigo-500 text-slate-200 cursor-pointer shadow-md";
+                    btn.onclick = () => selectOption(idx);
+                }
+
+                btn.innerHTML = `
+                    <div class="flex items-center space-x-3">
+                        <span class="w-7 h-7 rounded-lg bg-indigo-950 border border-indigo-700/50 flex items-center justify-center text-xs font-bold text-indigo-300 shrink-0">${letter}</span>
+                        <span>${opt}</span>
+                    </div>
+                `;
+                optionsContainer.appendChild(btn);
+            });
+
+            // Show / Hide explanation if already answered
+            if (answeredOption !== null) {
+                showExplanation(answeredOption === q.answer, q);
+            } else {
+                explanationBox.classList.add("hidden");
+            }
+
+            // Update navigation buttons state
+            prevBtn.disabled = currentQuestionIndex === 0;
+            
+            // Change next button to 'Submit Quiz' on last question
+            if (currentQuestionIndex === questions.length - 1) {
+                nextBtn.innerText = "Finish & Submit Quiz 🏁";
+            } else {
+                nextBtn.innerText = "Next Question →";
+            }
+        }
+
+        // Handle Option Selection with Instant Feedback & Irreversibility
+        function selectOption(selectedIndex) {
+            if (userAnswers[currentQuestionIndex] !== null) return; // Prevent changing once answered
+
+            userAnswers[currentQuestionIndex] = selectedIndex;
+            const q = questions[currentQuestionIndex];
+            const isCorrect = selectedIndex === q.answer;
+
+            // Re-render to lock choices and highlight instant feedback
+            loadQuestion();
+        }
+
+        // Display Detailed Explanation
+        function showExplanation(isCorrect, q) {
+            explanationBox.classList.remove("hidden");
+            if (isCorrect) {
+                explanationBox.className = "p-5 rounded-2xl border bg-emerald-950/30 border-emerald-500/40 text-emerald-100 space-y-3 transition-all animate-fadeIn";
+                feedbackTitle.innerHTML = `<span class="text-emerald-400 text-lg">✅ Correct!</span> <span class="text-xs text-emerald-300/80 font-normal">Your response is correct.</span>`;
+            } else {
+                explanationBox.className = "p-5 rounded-2xl border bg-rose-950/30 border-rose-500/40 text-rose-100 space-y-3 transition-all animate-fadeIn";
+                feedbackTitle.innerHTML = `<span class="text-rose-400 text-lg">❌ Incorrect!</span> <span class="text-xs text-rose-300/80 font-normal">The correct option was highlighted above.</span>`;
+            }
+            explanationEnglish.innerText = q.expEn;
+            explanationAmharic.innerText = q.expAm;
+        }
+
+        // Navigation handlers
+        fn = {};
+        function nextQuestion() {
+            if (currentQuestionIndex < questions.length - 1) {
+                currentQuestionIndex++;
+                loadQuestion();
+            } else {
+                // Submit quiz
+                finishQuiz();
+            }
+        }
+
+        function prevQuestion() {
+            if (currentQuestionIndex > 0) {
+                currentQuestionIndex--;
+                loadQuestion();
+            }
+        }
+
+        function skipQuestion() {
+            nextQuestion();
+        }
+
+        // Finish and Calculate Score
+        function finishQuiz() {
+            clearInterval(timerInterval);
+            quizView.classList.add("hidden");
+            quizTimer.classList.add("hidden");
+            resultsView.classList.remove("hidden");
+
+            // Compute score
+            let score = 0;
+            userAnswers.forEach((ans, idx) => {
+                if (ans === questions[idx].answer) score++;
+            });
+
+            const percentage = Math.round((score / questions.length) * 100);
+            const mins = Math.floor(examTimeSeconds / 60);
+            const secs = examTimeSeconds % 60;
+            const timeStr = `${mins}m ${secs}s`;
+
+            document.getElementById("resultName").innerText = studentName;
+            document.getElementById("resultId").innerText = studentId;
+            document.getElementById("resultScore").innerText = score;
+            document.getElementById("resultPercentage").innerText = percentage;
+            document.getElementById("resultTime").innerText = timeStr;
+
+            // Save submission to local storage for teacher dashboard
+            saveSubmissionRecord(score, percentage, timeStr);
+        }
+
+        // Save Record to LocalStorage
+        function saveSubmissionRecord(score, percentage, timeStr) {
+            let submissions = JSON.parse(localStorage.getItem("grade8_quiz_submissions") || "[]");
+            const record = {
+                name: studentName,
+                id: studentId,
+                score: score,
+                total: questions.length,
+                percentage: percentage,
+                time: timeStr,
+                date: new Date().toLocaleString()
+            };
+            submissions.push(record);
+            localStorage.setItem("grade8_quiz_submissions", JSON.stringify(submissions));
+        }
+
+        // Send Score via Email
+        function sendScoreEmail() {
+            let score = 0;
+            userAnswers.forEach((ans, idx) => {
+                if (ans === questions[idx].answer) score++;
+            });
+            const percentage = Math.round((score / questions.length) * 100);
+
+            const recipient = "mesayferedegn2@gmail.com";
+            const subject = encodeURIComponent(`Grade 8 English Quiz Result - ${studentName} (${studentId})`);
+            const body = encodeURIComponent(
+                `Dear Teacher,\n\nHere is my Simple Present Tense Unit Assessment result:\n\n` +
+                `Full Name: ${studentName}\n` +
+                `Student ID: ${studentId}\n` +
+                `Final Score: ${score} / 50 (${percentage}%)\n` +
+                `Time Taken: ${document.getElementById("resultTime").innerText}\n\n` +
+                `Submitted via the Interactive English Assessment Portal.`
+            );
+
+            window.location.href = `mailto:${recipient}?subject=${subject}&body=${body}`;
+        }
+
+        // Restart Quiz
+        function restartQuiz() {
+            currentQuestionIndex = 0;
+            userAnswers = new Array(questions.length).fill(null);
+            examTimeSeconds = 0;
+            resultsView.classList.add("hidden");
+            registrationView.classList.remove("hidden");
+            document.getElementById("studentName").value = "";
+            document.getElementById("studentId").value = "";
+        }
+
+        // Teacher Dashboard Viewer
+        function toggleTeacherDashboard() {
+            const modal = document.getElementById("teacherDashboardModal");
+            if (modal.classList.contains("hidden")) {
+                loadSubmissionsList();
+                modal.classList.remove("hidden");
+            } else {
+                modal.classList.add("hidden");
+            }
+        }
+
+        function loadSubmissionsList() {
+            const container = document.getElementById("submissionsListContainer");
+            let submissions = JSON.parse(localStorage.getItem("grade8_quiz_submissions") || "[]");
+
+            if (submissions.length === 0) {
+                container.innerHTML = `<div class="text-center py-8 text-slate-500 text-sm">No student submissions recorded yet on this device.</div>`;
+                return;
+            }
+
+            container.innerHTML = "";
+            submissions.reverse().forEach((sub, idx) => {
+                const card = document.createElement("div");
+                card.className = "bg-slate-950/70 border border-indigo-900/50 rounded-2xl p-4 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3";
+                card.innerHTML = `
+                    <div class="space-y-1">
+                        <div class="flex items-center gap-2">
+                            <span class="font-bold text-white text-base">${sub.name}</span>
+                            <span class="text-xs bg-indigo-500/10 text-indigo-300 px-2 py-0.5 rounded border border-indigo-500/20">${sub.id}</span>
+                        </div>
+                        <p class="text-xs text-slate-400">Submitted on: ${sub.date} • Duration: ${sub.time}</p>
+                    </div>
+                    <div class="flex items-center gap-3">
+                        <div class="text-right">
+                            <div class="text-lg font-black text-indigo-400">${sub.score} / ${sub.total}</div>
+                            <div class="text-xs text-slate-400 font-medium">${sub.percentage}% Score</div>
+                        </div>
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        function clearSubmissions() {
+            localStorage.removeItem("grade8_quiz_submissions");
+            loadSubmissionsList();
+        }
+
+        // Dedicated British Female Narrator Text-to-Speech Feature
+        function readQuestionAudio() {
+            if (!('speechSynthesis' in window)) {
+                showModal("Speech Not Supported", "Your browser does not support text-to-speech audio narration.", true);
+                return;
+            }
+
+            window.speechSynthesis.cancel(); // Stop any ongoing speech
+            const q = questions[currentQuestionIndex];
+            const textToRead = `Question ${currentQuestionIndex + 1}. ${q.question}`;
+            
+            const utterance = new SpeechSynthesisUtterance(textToRead);
+            utterance.rate = 0.95; // Natural pace
+            utterance.pitch = 1.0;
+
+            // Attempt to select a British Female voice ('en-GB')
+            const voices = window.speechSynthesis.getVoices();
+            const britishVoice = voices.find(v => v.lang === 'en-GB' && (v.name.toLowerCase().includes('female') || v.name.toLowerCase().includes('hazel') || v.name.toLowerCase().includes('libby') || v.name.toLowerCase().includes('serena') || v.name.toLowerCase().includes('uk'))) || voices.find(v => v.lang === 'en-GB');
+
+            if (britishVoice) {
+                utterance.voice = britishVoice;
+            } else {
+                utterance.lang = 'en-GB';
+            }
+
+            window.speechSynthesis.speak(utterance);
+        }
+
+        // Ensure voices are loaded for speech synthesis
+        if ('speechSynthesis' in window) {
+            window.speechSynthesis.onvoiceschanged = () => {
+                window.speechSynthesis.getVoices();
+            };
+        }
+    </script>
+</body>
+</html>
